@@ -10,19 +10,23 @@
 
 ---
 
-## 🚀 Technical Highlights / 技术亮点
+## 🚀 Recent Updates & Technical Highlights / 最新更新与技术亮点
 
-- **⚡ Powered by Bun**: Ultra-fast startup, native TypeScript support, and zero-config build.
-- **🎨 Reactive TUI with Ink**: A modern terminal UI built using React's declarative component patterns.
-- **🧩 Skill-Driven Architecture**: Define agent personas, constraints, and models in local `.md` files.
-- **🌈 Rich Visuals**: Features gradient pixel-art headers and smooth streaming animations.
-- **🔌 Provider Agnostic**: Compatible with any OpenAI-style API (GPT, DeepSeek, Ollama, etc.).
+- **Powered by Bun**: Ultra-fast startup, native TypeScript support, and zero-config build.
+- **Reactive TUI with Ink**: A modern terminal UI built using React's declarative component patterns.
+- **Skill-Driven Architecture**: Define agent personas, constraints, and models in local `.md` files.
+- **Real-time Token Tracking**: Built-in high-performance token estimation engine with a live "Cost" monitor in the header.
+- **Modern Message Design**: Elegant sidebar-styled message layout inspired by professional developer tools.
+- **Rich Visuals**: Features gradient pixel-art headers and smooth streaming animations.
+- **Provider Agnostic**: Compatible with any OpenAI-style API (GPT, DeepSeek, Ollama, etc.).
 
-- **⚡ Bun 驱动**: 极速启动，原生支持 TypeScript，零配置构建。
-- **🎨 Ink 响应式 TUI**: 使用 React 的声明式组件模式构建现代终端界面。
-- **🧩 技能驱动架构**: 在本地 `.md` 文件中定义智能体人格、约束和模型。
-- **🌈 丰富视觉**: 具备渐变像素艺术标题和流畅的流式动画。
-- **🔌 服务商无关**: 兼容任何 OpenAI 风格的 API (GPT, DeepSeek, Ollama 等)。
+- **Bun 驱动**: 极速启动，原生支持 TypeScript，零配置构建。
+- **Ink 响应式 TUI**: 使用 React 的声明式组件模式构建现代终端界面。
+- **技能驱动架构**: 在本地 `.md` 文件中定义智能体人格、约束和模型。
+- **实时 Token 追踪**: 内置高性能 Token 估算引擎，Header 区域实时显示“消耗监控”。
+- **现代消息设计**: 借鉴专业开发者工具的优雅侧边线条消息布局。
+- **丰富视觉**: 具备渐变像素艺术标题和流畅的流式动画。
+- **服务商无关**: 兼容任何 OpenAI 风格的 API (GPT, DeepSeek, Ollama 等)。
 
 ---
 
@@ -48,6 +52,7 @@ lilac/
 ├── src/
 │   ├── components/  # Ink UI Components / 视觉组件
 │   ├── core/        # Logic & API Clients / 逻辑与 API 客户端
+│   ├── utils/       # Token estimation & helpers / Token 估算与工具类
 │   └── index.tsx    # Entry point / 程序入口
 ├── .env             # API Configuration / API 配置
 └── intro.png        # TUI Screenshot / TUI 截图
@@ -108,3 +113,9 @@ You are an expert TypeScript developer.
 
 **Tempsyche**
 
+---
+
+## 📄 License / 许可证
+
+MIT License. Feel free to use and extend!
+MIT 许可证。欢迎自由使用与扩展！

@@ -9,9 +9,8 @@ import { MessageItem } from './MessageItem';
 import { loadDefaultSkill } from '../core/skills';
 import { createChatStream } from '../core/api';
 import { hasApiKey } from '../core/config';
-import type { AppState, Message } from '../types';
-
 import { estimateTokens } from '../utils/tokens';
+import type { AppState, Message } from '../types';
 
 export const App: React.FC = () => {
   const { exit } = useApp();
@@ -26,7 +25,20 @@ export const App: React.FC = () => {
   });
   const [input, setInput] = useState('');
 
-  // ... (中间代码省略，仅展示 handleSubmit 中的修改点)
+  useEffect(() => {
+    loadDefaultSkill().then(skill => {
+      setState(s => ({ ...s, activeSkill: skill }));
+    });
+    
+    // 4秒后自动隐藏欢迎界面
+    const timer = setTimeout(() => setShowWelcome(false), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useInput((input, key) => {
+    if (key.escape || (key.ctrl && input === 'c')) exit();
+    if (showWelcome) setShowWelcome(false);
+  });
 
   const handleSubmit = async (query: string) => {
     if (showWelcome) setShowWelcome(false);
@@ -67,7 +79,6 @@ export const App: React.FC = () => {
 
     try {
       await createChatStream([...state.messages, userMsg], state.activeSkill, (chunk) => {
-        // 实时计算每个 chunk 的 Token 并累加
         const chunkTokens = estimateTokens(chunk);
         setState(s => {
           const last = s.messages[s.messages.length - 1];
@@ -88,7 +99,28 @@ export const App: React.FC = () => {
   };
 
   if (showWelcome) {
-    // ...
+    return (
+      <Box flexDirection="column" alignItems="center" justifyContent="center" padding={2}>
+        <Gradient colors={['#818cf8', '#c084fc', '#e879f9']}>
+          <BigText text="LILAC" font="block" />
+        </Gradient>
+        <Box marginTop={-1} marginBottom={1}>
+          <Text color="gray">Author: </Text>
+          <Text bold color="cyan">Tempsyche</Text>
+        </Box>
+        <Box borderStyle="round" borderColor="gray" paddingX={2}>
+          <Text italic color="magenta">Designing a Skill-Driven CLI Agent</Text>
+        </Box>
+        <Box marginTop={2}>
+          <Text color="gray">Press any key to start...</Text>
+        </Box>
+        {!hasApiKey && (
+          <Box marginTop={1}>
+            <Text color="yellow">⚠️ 提示: 尚未配置 API Key, 仅支持 UI 预览模式。</Text>
+          </Box>
+        )}
+      </Box>
+    );
   }
 
   return (
@@ -99,7 +131,6 @@ export const App: React.FC = () => {
         status={hasApiKey ? state.status : 'Config Required'} 
         tokens={state.sessionTokens}
       />
-      {/* ... */}
 
       <Box flexDirection="column" flexGrow={1} marginBottom={1}>
         {state.messages.length === 0 && (
@@ -135,6 +166,10 @@ export const App: React.FC = () => {
             </Text>
           </Box>
         )}
+      </Box>
+      
+      <Box marginTop={1}>
+        <Text color="gray">Press ESC or Ctrl+C to exit</Text>
       </Box>
     </Box>
   );
