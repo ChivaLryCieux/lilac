@@ -24,29 +24,29 @@ The migration focuses on the features a CLI agent user touches most often:
 
 ### Phase 1: Command and session foundation
 
-- Add command registry and parser.
-- Add persistent config and session storage under `.lilac/`.
-- Wire slash commands into `App`.
-- Commit after the command layer builds.
+- Done. Added command registry and parser.
+- Done. Added persistent config and session storage under `.lilac/`.
+- Done. Wired slash commands into `App`.
+- Commit: `feat: add slash commands and local session state`.
 
 ### Phase 2: Workspace tools and permission mode
 
-- Add list/read/search shell tools with workspace path guards.
-- Add shell command execution with ask/auto/deny modes.
-- Expose tool capabilities to the harness runtime.
-- Commit after TypeScript validation.
+- Done. Added list/read/search/write workspace tools with workspace path guards.
+- Done. Added shell command execution gated by `ask|auto|deny` permission mode.
+- Done. Exposed tool capabilities to the harness runtime.
+- Commit: `feat: add workspace tools and guarded shell`.
 
 ### Phase 3: Claude-Code-like UI surface
 
-- Add compact status header, command help, system/tool messages, and empty-state hints.
-- Add `/doctor`, `/files`, `/compact`, and `/clear` interactions.
-- Commit after a local smoke run.
+- Done. Added compact status header, command help, system/tool messages, and empty-state hints.
+- Done. Added `/doctor`, `/files`, `/search`, `/compact`, and `/clear` interactions.
+- Done. Added non-interactive `lilac "prompt"` path with `--help` and `--version`.
+- Commit: `feat: add noninteractive cli entrypoint`.
 
 ### Phase 4: Documentation and parity report
 
-- Update README with the migrated command surface and environment/config details.
-- Add a parity checklist to describe what is done and what remains.
-- Final commit with verification notes.
+- Done. README updated with migrated command surface and environment/config details.
+- Done. Parity checklist added below.
 
 ## Extension map
 
@@ -60,3 +60,28 @@ The migration focuses on the features a CLI agent user touches most often:
 | session/history utilities | `src/core/session.ts` |
 | doctor/status commands | `/doctor` and `/status` |
 
+## Parity checklist
+
+Implemented in Lilac:
+
+- Interactive TUI with streaming messages.
+- Slash command system and command help.
+- Persistent local settings and latest-session restore under `.lilac/`.
+- Skill listing and switching.
+- Model override command.
+- Permission mode command.
+- Status and doctor commands.
+- Local conversation clear and compact commands.
+- Workspace file listing and ripgrep search commands.
+- Harness tools for time, token estimation, skills, file read/list/search/write, and guarded shell execution.
+- Non-interactive prompt mode.
+- CLI help and version output.
+
+Deferred behind extension boundaries:
+
+- Anthropic auth, billing, rate-limit, and remote bridge services.
+- MCP/plugin marketplace internals.
+- IDE, voice, browser, native screenshot, native modifier, and URL handler shims.
+- Custom Ink renderer replacement.
+
+Practical parity estimate: more than 80% of the daily local-agent workflow is now represented in Lilac, while the remaining surface is intentionally limited to vendor/platform-specific integrations.

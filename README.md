@@ -20,6 +20,7 @@
 - **Rich Visuals**: Features gradient pixel-art headers and smooth streaming animations.
 - **Provider Agnostic**: Compatible with any OpenAI-style API (GPT, DeepSeek, Ollama, etc.).
 - **Harness Orchestration**: Optional multi-step tool-calling runtime to improve agent reasoning and context access.
+- **Claude-Code-like CLI Surface**: Slash commands, session restore, workspace tools, permission modes, doctor/status checks, and non-interactive prompt mode.
 
 - **Bun 驱动**: 极速启动，原生支持 TypeScript，零配置构建。
 - **Ink 响应式 TUI**: 使用 React 的声明式组件模式构建现代终端界面。
@@ -29,6 +30,7 @@
 - **丰富视觉**: 具备渐变像素艺术标题和流畅的流式动画。
 - **服务商无关**: 兼容任何 OpenAI 风格的 API (GPT, DeepSeek, Ollama 等)。
 - **Harness 编排层**: 可选的多步工具调用运行时，增强智能体推理与上下文获取能力。
+- **类 Claude Code CLI 体验**: Slash commands、会话恢复、工作区工具、权限模式、doctor/status 检查，以及非交互式 prompt 模式。
 
 ---
 
@@ -83,6 +85,7 @@ This means Lilac is no longer "just a chat UI", but a composable agent system:
 | **OpenAI Agents SDK** | High-level agent tooling orchestration / 高层级工具代理编排能力 |
 | **LangGraph** | Graph/state-machine workflow control for agent loops / 基于图与状态机的流程控制 |
 | **OpenAI-compatible API** | LLM provider interface (GPT, DeepSeek, Ollama, etc.) / 大模型提供方接口层 |
+| `.lilac/` | Local settings and latest session state / 本地设置与最近会话状态 |
 | `ink-text-input` | Interactive user input / 交互式用户输入 |
 | `ink-spinner` | Thinking/Loading animations / 思考与加载动画 |
 | `ink-big-text` | Pixel art terminal headers / 像素艺术终端标题 |
@@ -98,9 +101,12 @@ lilac/
 ├── skills/          # .md Skill definitions / 技能定义文件
 ├── src/
 │   ├── components/  # Ink UI Components / 视觉组件
+│   ├── commands/    # Slash command registry / 斜杠命令注册表
 │   ├── core/        # Logic & API Clients / 逻辑与 API 客户端
+│   ├── harness/     # Tool runtime and orchestrators / 工具运行时与编排器
 │   ├── utils/       # Token estimation & helpers / Token 估算与工具类
 │   └── index.tsx    # Entry point / 程序入口
+├── .lilac/          # Runtime state, created automatically / 自动创建的运行状态
 ├── .env             # API Configuration / API 配置
 └── intro.png        # TUI Screenshot / TUI 截图
 ```
@@ -156,7 +162,44 @@ bun run dev
 
 # Production start / 生产启动
 bun run start
+
+# Non-interactive prompt / 非交互式调用
+bun src/index.tsx "summarize this repository"
+
+# Type check / 类型检查
+bun run typecheck
 ```
+
+## ⌨️ Commands / 斜杠命令
+
+Inside the TUI, Lilac now supports a Claude-Code-like command surface:
+在 TUI 中，Lilac 现在支持一组类 Claude Code 的斜杠命令：
+
+| Command / 命令 | Purpose / 用途 |
+| :--- | :--- |
+| `/help` | Show available commands / 查看命令 |
+| `/status` | Show runtime status, model, skill, tokens, and config / 查看运行状态 |
+| `/model [name]` | Show or set model override / 查看或设置模型 |
+| `/skills [name]` | List or switch skills / 列出或切换技能 |
+| `/permissions [ask\|auto\|deny]` | Show or set workspace tool permission mode / 查看或设置工具权限模式 |
+| `/files [path]` | List workspace files / 列出工作区文件 |
+| `/search <pattern>` | Search workspace with ripgrep / 使用 ripgrep 搜索工作区 |
+| `/doctor` | Run local health checks / 运行本地健康检查 |
+| `/compact` | Replace conversation with a local summary / 本地压缩会话上下文 |
+| `/clear` | Clear visible conversation / 清空当前可见会话 |
+| `/exit` | Exit Lilac / 退出 |
+
+Workspace tools available to the harness:
+Harness 可用的工作区工具：
+
+- `read_workspace_file`
+- `list_workspace_files`
+- `search_workspace`
+- `write_workspace_file`
+- `run_shell_command`
+
+`write_workspace_file` and `run_shell_command` require `/permissions auto`.
+`write_workspace_file` 与 `run_shell_command` 需要先设置 `/permissions auto`。
 
 ---
 
